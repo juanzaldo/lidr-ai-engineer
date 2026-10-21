@@ -1,0 +1,26 @@
+# Credenciales y configuración local
+.env
+.env.*
+!.env.example
+
+# Entornos virtuales
+.venv/
+venv/
+
+# Archivos generados por Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Cachés y cobertura de pruebas
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

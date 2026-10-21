@@ -1,0 +1,22 @@
+[project]
+name = "estimator-cag"
+version = "0.1.0"
+description = "API de estimación de software con FastAPI y contexto estático CAG"
+readme = "README.md"
+authors = [
+    { name = "janzaldo", email = "janzaldo@yahoo.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=1.17.0",
+    "fastapi>=0.156.3",
+    "openai>=3.35.1",
+    "pydantic-settings>=2.16.1",
+    "python-dotenv>=1.2.4",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+]

@@ -1,0 +1,45 @@
+name: Validar practica 01
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: practicas/01-estimador-cag/mi-proyecto
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Instalar uv y Python
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.23"
+          python-version: "3.11"
+
+      - name: Instalar dependencias bloqueadas
+        run: uv sync --locked --dev
+
+      - name: Verificar que los archivos privados no estan registrados
+        shell: bash
+        run: |
+          if git ls-files --full-name | grep -E '(^|/)(\.env($|\.)|\.venv/)' | grep -vE '(^|/)\.env\.example$'; then
+            echo "Error: hay archivos privados o entornos virtuales registrados."
+            exit 1
+          fi
+          git check-ignore --no-index .env
+          if git check-ignore --no-index .env.example; then
+            echo "Error: .env.example debe poder compartirse."
+            exit 1
+          fi
+
+      - name: Ejecutar pruebas sin llamadas al LLM
+        run: uv run --locked python -m unittest discover -s tests -v
