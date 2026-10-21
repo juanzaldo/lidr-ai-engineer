@@ -255,7 +255,10 @@ La plantilla `.env.example` se copió explícitamente. El original se conserva.
 
 La solución del curso está en
 https://github.com/LIDR-academy-temp/ai-engineering/tree/session_2.
-Su incorporación y comparación siguen pendientes de revisar contenido y licencia.
+Se incorporaron 22 archivos de `estimator/` desde el commit
+`79e49374f04652f0b8b62c13b9783ab13b226e6f`, verificando hashes de la copia.
+No se encontró un archivo de licencia. La procedencia y comparación están
+documentadas en [REFERENCIA.md](REFERENCIA.md). No se ejecutó la referencia.
 Los intentos iniciales de acceso desde la terminal fallaron por resolución de
 github.com; no se concluyó que el repositorio fuera inválido o privado.
 
@@ -290,7 +293,8 @@ remota queda pendiente del primer push. Más detalle en
 - Flujo funcional y prueba real con OpenAI: completados.
 - Pruebas automáticas locales: aprobadas.
 - Prueba real con Anthropic: pendiente, para evitar gasto adicional.
-- Publicación y primera ejecución de Actions: pendientes.
-- Solución oficial y comparación: pendientes.
+- Primera publicación en main: confirmada por la salida del push del usuario.
+- Primera ejecución remota de Actions: resultado aún no confirmado.
+- Solución oficial y comparación: incorporadas localmente; commit y push pendientes.
 - Mejoras futuras: manejo HTTP de errores del proveedor, pruebas del servicio,
   cálculos deterministas, refinamiento del prompt y comparación entre modelos.

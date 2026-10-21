@@ -18,7 +18,8 @@ No utilizamos base de datos, búsqueda de documentos ni persistencia.
 - `mi-proyecto/`: implementación desarrollada durante la práctica.
 - `transcripcion-reunion.txt`: entrada de ejemplo para las pruebas.
 - [guia-practica.md](guia-practica.md): pasos, decisiones, errores y resultados registrados.
-- `solucion-referencia/`: solución del curso, pendiente de incorporar.
+- `solucion-referencia/`: copia de la solución del curso en la rama session_2.
+- [REFERENCIA.md](REFERENCIA.md): procedencia, commit y comparación de ambas implementaciones.
 
 ## Requisitos
 
@@ -153,4 +154,6 @@ sustituye la facturación del proveedor.
 
 [Repositorio de referencia, rama session_2](https://github.com/LIDR-academy-temp/ai-engineering/tree/session_2)
 
-Pendiente de revisar su contenido y licencia antes de copiarlo aquí.
+Incorporada desde el commit `79e49374f04652f0b8b62c13b9783ab13b226e6f`.
+No se encontró un archivo de licencia en esa versión. Consulta
+[la procedencia y condiciones pendientes](REFERENCIA.md).
