@@ -61,6 +61,12 @@ que esta práctica todavía no configura.
 
 ## Bitácora
 
+La iteración posterior local amplía la suite de siete a catorce pruebas,
+incluyendo adaptadores SDK simulados, errores HTTP y logging. No hace llamadas
+reales. Ver [mejoras-locales.md](mejoras-locales.md). La descripción inicial
+del servicio sustituido corresponde a las primeras siete pruebas; las nuevas
+sí ejecutan su lógica con los clientes SDK simulados.
+
 - Se añadieron pruebas sin llamadas reales al LLM.
 - Se declaró httpx como dependencia de desarrollo y se actualizó uv.lock.
 - Se creó el workflow y se actualizaron los README.

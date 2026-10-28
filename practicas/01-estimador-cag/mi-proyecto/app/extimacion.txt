@@ -1,0 +1,25 @@
+Cliente: Tenemos una cafetería y necesitamos una página web para que nuestros clientes consulten el menú y nos contacten.
+
+Desarrollador: ¿Qué secciones necesitan?
+
+Cliente: Inicio, menú con categorías y precios, una galería de fotos y una sección de contacto con dirección, horarios y un enlace a nuestra ubicación en Google Maps.
+
+Desarrollador: ¿Quién actualizará el menú?
+
+Cliente: La encargada. Necesitamos que pueda iniciar sesión y agregar, editar o quitar productos, cambiar precios y marcar productos como agotados. Solo habrá una administradora.
+
+Desarrollador: ¿Quieren recibir pedidos o pagos en línea?
+
+Cliente: No por ahora. Solo queremos un botón de WhatsApp y un formulario que envíe las consultas a nuestro correo.
+
+Desarrollador: ¿Ya tienen el diseño y los contenidos?
+
+Cliente: Tenemos el logotipo, los colores, las fotografías y los textos. Todavía no tenemos un diseño de las pantallas.
+
+Desarrollador: ¿Hay alguna fecha objetivo?
+
+Cliente: Nos gustaría publicarla en cuatro semanas. Debe verse bien en celulares y computadoras. Necesitamos ayuda con el despliegue y una explicación breve para administrar el menú.
+
+Desarrollador: Para esta estimación utilizaremos una tarifa de 500 MXN por hora. El dominio, hosting y servicios externos se presupuestarán por separado.
+
+Cliente: De acuerdo. Queremos conocer las tareas, horas, coste total, riesgos y si el plazo es viable.

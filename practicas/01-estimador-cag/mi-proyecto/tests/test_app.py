@@ -15,10 +15,12 @@ with patch.dict(os.environ, {
     "LLM_PROVIDER": "openai",
     "LLM_MODEL": "gpt-4o-mini",
     "APP_ENV": "test",
+    "LOG_LEVEL": "CRITICAL",
 }):
     from app.main import app
     from app.context.examples import ESTIMATION_EXAMPLES
     from app.services.llm_service import build_system_prompt
+    from app.services.errors import LLMServiceError
 
 
 class ApplicationTests(unittest.TestCase):
@@ -89,6 +91,22 @@ class ApplicationTests(unittest.TestCase):
         self.assertIn("post", schema["paths"]["/api/v1/estimate"])
         self.llm.assert_not_called()
 
+    def test_service_errors_have_controlled_http_responses(self):
+        for code, status in (
+            ("provider_timeout", 504), ("provider_unavailable", 503),
+            ("provider_rejected", 502), ("invalid_response", 502),
+            ("configuration_error", 500), ("internal_error", 500),
+        ):
+            with self.subTest(code=code):
+                self.llm.side_effect = LLMServiceError(code)
+                response = self.client.post(
+                    "/api/v1/estimate", json={"transcription": "Necesitamos un blog."}
+                )
+                self.assertEqual(response.status_code, status)
+                self.assertEqual(response.json()["detail"], {
+                    "code": code, "message": LLMServiceError(code).public_message,
+                })
+
     def test_static_examples_are_in_prompt(self):
         self.assertGreaterEqual(len(ESTIMATION_EXAMPLES), 2)
         prompt = build_system_prompt()
@@ -105,6 +123,8 @@ class ApplicationTests(unittest.TestCase):
             "app/routers/__init__.py", "app/routers/estimations.py",
             "app/services/__init__.py", "app/services/llm_service.py",
             "app/context/__init__.py", "app/context/examples.py",
+            "app/schemas/__init__.py", "app/schemas/estimation.py",
+            "app/services/errors.py", "app/logging_config.py",
             ".env.example", ".gitignore", "pyproject.toml", "uv.lock", "README.md",
         )
         for relative in required:
@@ -122,7 +142,7 @@ class ApplicationTests(unittest.TestCase):
                 variables[name.strip()] = value.strip()
         self.assertEqual(set(variables), {
             "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "LLM_PROVIDER",
-            "LLM_MODEL", "APP_ENV", "LOG_LEVEL",
+            "LLM_MODEL", "APP_ENV", "LOG_LEVEL", "ANTHROPIC_WORKSPACE_ID",
         })
         self.assertTrue(all(value == "" for value in variables.values()),
                         "La plantilla debe tener las variables sin valores")

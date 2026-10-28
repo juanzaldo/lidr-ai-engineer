@@ -21,6 +21,9 @@ del curso antes de redistribuirlo fuera del acceso autorizado.
 
 ## Diferencias observadas en el código
 
+Esta tabla describe la versión original entregada. Las mejoras posteriores
+incluidas en `session_3` se documentan en [mejoras-locales.md](mejoras-locales.md).
+
 | Aspecto | Mi proyecto | Solución del curso |
 |---|---|---|
 | Proveedores | OpenAI y Anthropic | OpenAI y Anthropic |

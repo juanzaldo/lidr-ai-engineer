@@ -15,11 +15,12 @@ class Settings(BaseSettings):
 
     OPENAI_API_KEY: SecretStr | None = None
     ANTHROPIC_API_KEY: SecretStr | None = None
+    ANTHROPIC_WORKSPACE_ID: str | None = None
 
     LLM_PROVIDER: Literal["openai", "anthropic"] = "openai"
     LLM_MODEL: str = "gpt-4o-mini"
     APP_ENV: str = "development"
-    LOG_LEVEL: str = "DEBUG"
+    LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "DEBUG"
 
     @model_validator(mode="after")
     def validate_provider_key(self) -> Self:

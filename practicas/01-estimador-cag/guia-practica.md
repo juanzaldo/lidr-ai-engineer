@@ -290,6 +290,12 @@ remota queda pendiente del primer push. Más detalle en
 
 ## Estado y siguientes mejoras
 
+Esta sección registra el cierre de la entrega original. La posterior
+separación de esquemas y funciones, logging y manejo de errores se implementó
+inicialmente solo localmente: ver [mejoras-locales.md](mejoras-locales.md).
+El 28 de octubre de 2026 se autorizó su publicación en `session_3`, junto con
+la interfaz descrita en [guia-session-3.md](guia-session-3.md).
+
 - Flujo funcional y prueba real con OpenAI: completados.
 - Pruebas automáticas locales: aprobadas.
 - Prueba real con Anthropic: pendiente, para evitar gasto adicional.

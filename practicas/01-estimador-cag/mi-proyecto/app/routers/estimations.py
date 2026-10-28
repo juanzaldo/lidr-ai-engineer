@@ -1,48 +1,33 @@
-from datetime import datetime
+from fastapi import APIRouter, HTTPException
 
-from fastapi import APIRouter
-from pydantic import BaseModel, Field, field_validator
-
+from app.schemas.estimation import EstimationRequest, EstimationResponse, ErrorResponse
+from app.services.errors import LLMServiceError
 from app.services.llm_service import generate_estimation
 
 
 router = APIRouter(prefix="/api/v1", tags=["Estimaciones"])
+ERROR_STATUS = {
+    "invalid_input": 422,
+    "provider_timeout": 504,
+    "provider_unavailable": 503,
+    "provider_rejected": 502,
+    "invalid_response": 502,
+    "configuration_error": 500,
+    "internal_error": 500,
+}
 
 
-class EstimationRequest(BaseModel):
-    transcription: str = Field(
-        min_length=1,
-        description="Transcripción de la reunión que se desea estimar.",
-    )
-
-    @field_validator("transcription")
-    @classmethod
-    def validate_transcription(cls, value: str) -> str:
-        value = value.strip()
-        if not value:
-            raise ValueError("La transcripción no puede estar vacía.")
-        return value
-
-
-class EstimationResponse(BaseModel):
-    estimation: str
-    model: str
-    provider: str
-    input_tokens: int
-    output_tokens: int
-    total_tokens: int
-    estimated_cost_usd: float | None = Field(
-        description="Coste aproximado de la llamada al LLM en USD."
-    )
-    timestamp: datetime = Field(
-        description="Fecha y hora UTC de generación de la respuesta."
-    )
-    latency_ms: int = Field(
-        description="Tiempo transcurrido de la llamada en milisegundos."
-    )
-
-
-@router.post("/estimate", response_model=EstimationResponse)
+@router.post(
+    "/estimate",
+    response_model=EstimationResponse,
+    responses={status: {"model": ErrorResponse} for status in (500, 502, 503, 504)},
+)
 async def estimate(request: EstimationRequest) -> EstimationResponse:
-    result = await generate_estimation(request.transcription)
+    try:
+        result = await generate_estimation(request.transcription)
+    except LLMServiceError as exc:
+        raise HTTPException(
+            status_code=ERROR_STATUS[exc.code],
+            detail={"code": exc.code, "message": exc.public_message},
+        ) from None
     return EstimationResponse(**result)

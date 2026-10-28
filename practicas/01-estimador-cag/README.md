@@ -1,5 +1,12 @@
 # Práctica 01 — Estimador de software con CAG
 
+## Continuación: sesión 3
+
+La rama `session_3` incorpora chat Streamlit, streaming con dos proveedores,
+selector de modelo, costes y tokens, y un panel de contexto CAG.
+Consultar la [guía de sesión 3](guia-session-3.md) para configuración,
+ejecución, resolución del workspace de Anthropic y validación.
+
 ## Objetivo
 
 Construir una API FastAPI que reciba la transcripción de una reunión
@@ -109,6 +116,9 @@ Arrancar el servidor, consultar Swagger y ejecutar `/health` no consume
 tokens del LLM. Generar una estimación sí consume créditos.
 
 ## Verificación registrada
+
+La rama `session_3` incluye una iteración posterior a la primera entrega:
+[mejoras de organización, logging y errores](mejoras-locales.md).
 
 La implementación original se probó localmente:
 
