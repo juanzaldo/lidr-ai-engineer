@@ -15,7 +15,7 @@ class FormTests(unittest.TestCase):
             side_effect=AssertionError("Sin red en tests"),
         ))
         self.app = AppTest.from_file(
-            str(Path(__file__).resolve().parents[1] / "streamlit_app.py"),
+            str(Path(__file__).resolve().parents[1] / "streamlit_legacy.py"),
             default_timeout=30,
         ).run()
         self.assertFalse(self.app.exception)

@@ -202,6 +202,9 @@ class ApplicationTests(unittest.TestCase):
         self.assertEqual(set(variables), {
             "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "LLM_PROVIDER",
             "LLM_MODEL", "APP_ENV", "LOG_LEVEL", "ANTHROPIC_WORKSPACE_ID",
+            "MAX_CONVERSATION_TURNS",
+            "MAX_ATTACHMENTS", "MAX_ATTACHMENT_BYTES", "MAX_TOTAL_ATTACHMENT_BYTES",
+            "MAX_ATTACHMENT_CHARS", "MAX_CONTEXT_CHARS",
         })
         self.assertTrue(all(value == "" for value in variables.values()),
                         "La plantilla debe tener las variables sin valores")

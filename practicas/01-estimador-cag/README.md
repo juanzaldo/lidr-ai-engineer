@@ -1,5 +1,12 @@
 # Práctica 01 — Estimador de software con CAG
 
+## Sesión 5 · Conversaciones y adjuntos
+
+La rama `pre-session-05` añade sesiones, ventana deslizante, hechos del proyecto,
+PDF/Word y salida estructurada. Consulta la [guía de sesión 5](guia-session-5.md)
+y el [README de ejecución actual](mi-proyecto/README.md). La suite local incluye
+71 pruebas y 139 subcasos con proveedores simulados, sin consumo de tokens.
+
 ## Continuación y cierre de la sesión 4
 
 La rama `pre-session-04` contiene el formulario tipado, la API `/estimate`

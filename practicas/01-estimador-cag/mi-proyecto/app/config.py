@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal, Self
 
-from pydantic import SecretStr, model_validator
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,6 +21,12 @@ class Settings(BaseSettings):
     LLM_MODEL: str = "gpt-4o-mini"
     APP_ENV: str = "development"
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "DEBUG"
+    MAX_CONVERSATION_TURNS: int = Field(default=6, ge=1)
+    MAX_ATTACHMENTS: int = Field(default=5, ge=1)
+    MAX_ATTACHMENT_BYTES: int = Field(default=5_000_000, ge=1)
+    MAX_TOTAL_ATTACHMENT_BYTES: int = Field(default=10_000_000, ge=1)
+    MAX_ATTACHMENT_CHARS: int = Field(default=60_000, ge=1)
+    MAX_CONTEXT_CHARS: int = Field(default=80_000, ge=1)
 
     @model_validator(mode="after")
     def validate_provider_key(self) -> Self:

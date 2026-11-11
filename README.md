@@ -31,6 +31,7 @@ Cada proyecto proporciona un `.env.example` sin credenciales reales.
 El workflow `.github/workflows/validate.yml` valida la práctica 01 en cada
 push y pull request. También permite ejecución manual desde Actions.
 Ejecuta pruebas con el proveedor LLM simulado, sin consumir créditos.
-La primera ejecución en GitHub queda pendiente del primer push.
+La sesión 5 incorpora conversaciones, adjuntos y validación estructurada.
+Consulta la [guía y entrega de sesión 5](practicas/01-estimador-cag/guia-session-5.md).
 
 Consulta [la explicación del pipeline](practicas/01-estimador-cag/validacion-automatica.md).

@@ -58,6 +58,6 @@ class PromptTests(unittest.TestCase):
 
     def test_unknown_version_does_not_silently_use_v1(self):
         with self.assertRaises(TemplateNotFound):
-            render_estimation_prompt(self.request(), version="v2")
+            render_estimation_prompt(self.request(), version="v999")
         with self.assertRaises(ValueError):
             render_estimation_prompt(self.request(), version="../legacy")

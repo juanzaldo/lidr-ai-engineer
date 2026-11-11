@@ -12,7 +12,8 @@ con push, pull request o manualmente desde la pestaña Actions.
    falla si este no concuerda con `pyproject.toml`.
 4. Comprueba que no haya archivos `.env` ni `.venv` registrados en Git,
    que `.env` esté ignorado y que `.env.example` pueda compartirse.
-5. Ejecuta las pruebas con unittest y TestClient de FastAPI.
+5. Ejecuta pytest, que incluye las pruebas unittest anteriores, AsyncClient
+   con transporte ASGI para las sesiones y AppTest para Streamlit.
 
 Las comprobaciones revisan la estructura, la plantilla de configuración,
 los ejemplos presentes en el prompt, `/health`, Swagger/OpenAPI, entradas
@@ -39,12 +40,12 @@ Desde la raíz del repositorio, en PowerShell:
 ```powershell
 cd practicas/01-estimador-cag/mi-proyecto
 uv sync --locked --dev
-uv run --locked python -m unittest discover -s tests -v
+uv run --locked python -m pytest -q
 ```
 
 No necesitas arrancar Uvicorn ni crear `.env` para estas pruebas.
 TestClient envía peticiones a la aplicación dentro del mismo proceso.
-`httpx` se declara como dependencia de desarrollo; unittest viene con Python.
+`httpx`, `pytest` y `pytest-asyncio` se incluyen en las dependencias bloqueadas.
 
 ## Leer el resultado en GitHub
 
@@ -60,6 +61,12 @@ que esta práctica todavía no configura.
 - [uv en GitHub Actions](https://docs.astral.sh/uv/guides/integration/github/)
 
 ## Bitácora
+
+Sesión 5: 71 pruebas y 139 subcasos aprobados localmente. Se prueban memoria,
+adjuntos PDF/DOCX, metadatos, salida estructurada, adaptadores simulados y
+conversación de tres turnos en la interfaz. La red externa y los clientes SDK
+reales se bloquean en la suite. El registro de publicación y CI está en la
+[guía de sesión 5](guia-session-5.md). Las notas siguientes son históricas.
 
 La iteración posterior local amplía la suite de siete a catorce pruebas,
 incluyendo adaptadores SDK simulados, errores HTTP y logging. No hace llamadas

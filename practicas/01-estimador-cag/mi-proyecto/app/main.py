@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from app.config import settings
 from app.logging_config import configure_logging
 from app.routers.estimations import router as estimations_router
+from app.routers.sessions import router as sessions_router
 
 
 @asynccontextmanager
@@ -31,6 +32,7 @@ app = FastAPI(
 )
 
 app.include_router(estimations_router)
+app.include_router(sessions_router)
 
 
 @app.get("/health", tags=["Estado"])
