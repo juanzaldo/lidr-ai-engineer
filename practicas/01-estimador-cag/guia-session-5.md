@@ -6,7 +6,8 @@
 `pre-session-05`: sesiones conversacionales, memoria acotada, metadatos,
 adjuntos PDF/DOCX, resultados estructurados y cliente Streamlit.
 Pasaron **71 pruebas y 139 subcasos en 10.66 s**, con proveedores simulados.
-La publicación y su ejecución de GitHub Actions se registrarán al verificarlas.
+La rama está publicada y GitHub Actions aprobó el commit de implementación.
+La entrega queda cerrada, con la prueba real del proveedor pendiente de autorización.
 
 ## Base y referencia verificadas
 
@@ -183,7 +184,7 @@ pruebas nuevas; pytest sigue ejecutando las unittest anteriores.
 - [x] Salida estructurada validada, sin romper los endpoints anteriores.
 - [x] Botón de nueva conversación y prueba de tres turnos en la interfaz.
 - [x] Pruebas locales, README operativo y dependencias bloqueadas.
-- [ ] Commit, push y verificación de GitHub Actions.
+- [x] Commit, push y verificación de GitHub Actions.
 
 La captura/GIF opcional no se generó. La coherencia semántica y calidad de
 un proveedor real siguen pendientes de una prueba autorizada con consumo de
@@ -191,7 +192,17 @@ tokens; las pruebas simuladas acreditan transporte y actualización del estado.
 
 ## Publicación
 
-Pendiente de verificar el push y CI. Rama prevista para entregar:
+Commit de implementación: `c08c297b0ed67638f0cff19bf5b92f81f7638f2c`.
+Se hizo `git push -u origin pre-session-05` y se verificó el seguimiento de
+la rama remota sin cambios locales pendientes antes del cierre documental.
+
+[GitHub Actions, ejecución 43108306039](https://github.com/juanzaldo/lidr-ai-engineer/actions/runs/43108306039)
+terminó con `success`: instalación desde lockfile, comprobación de archivos
+privados y suite de pruebas aprobadas. La verificación se realizó mediante
+la API de GitHub el 11 de noviembre de 2026. Este cierre documental se publica
+como commit adicional; no cambia la implementación validada.
+
+Enlace de entrega:
 [pre-session-05](https://github.com/juanzaldo/lidr-ai-engineer/tree/pre-session-05).
 El envío a Sisley por correo o WhatsApp corresponde al usuario; no se ha enviado.
 
