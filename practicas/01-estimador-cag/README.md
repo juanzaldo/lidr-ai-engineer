@@ -1,5 +1,15 @@
 # Práctica 01 — Estimador de software con CAG
 
+## Continuación y cierre de la sesión 4
+
+La rama `pre-session-04` contiene el formulario tipado, la API `/estimate`
+y los prompts Jinja2 versionados. Consulta el [cierre y guía de sesión 4](guia-session-4.md),
+el [README de ejecución actual](mi-proyecto/README.md) y el
+[prompt para continuar en la sesión 5](prompt-session-5.md).
+
+La validación registra 30 pruebas aprobadas y GitHub Actions en verde.
+[Enlace de entrega de la sesión 4](https://github.com/juanzaldo/lidr-ai-engineer/tree/pre-session-04).
+
 ## Continuación: sesión 3
 
 La rama `session_3` incorpora chat Streamlit, streaming con dos proveedores,

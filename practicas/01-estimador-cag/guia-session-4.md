@@ -82,9 +82,11 @@ variables ausentes, validación HTTP, errores del proveedor, mensajes separados,
 compatibilidad de la API anterior y funcionamiento del formulario con AppTest.
 Las seis pruebas específicas de templates pasaron en 28 milisegundos.
 
-GitHub Actions aprobó la validación del commit `10052fd7af341efe99bc35cdb0c7154c8611f67c`.
+GitHub Actions aprobó la validación del commit de implementación
+`10052fd7af341efe99bc35cdb0c7154c8611f67c` y del commit de documentación
+`f18bcbfd5d4beebba89a71ce20ec14ecdb791cc6`.
 Ejecución verificada el 11 de noviembre de 2026 en
-https://github.com/juanzaldo/lidr-ai-engineer/actions/runs/43093038559.
+[GitHub Actions](https://github.com/juanzaldo/lidr-ai-engineer/actions/runs/43093193404).
 
 Se añadieron Jinja2 y HTTPX como dependencias directas y se actualizó `uv.lock`.
 La ejecución inicial quedó detenida dentro del aislamiento de Windows.
@@ -96,8 +98,39 @@ proveedor. La prueba real queda pendiente de autorización específica.
 
 ## Entrega
 
-Rama publicada y verificada en GitHub el 11 de noviembre de 2026 en
-https://github.com/juanzaldo/lidr-ai-engineer/tree/pre-session-04.
+Rama publicada y verificada en GitHub el 11 de noviembre de 2026.
+[Enlace para entregar](https://github.com/juanzaldo/lidr-ai-engineer/tree/pre-session-04).
 
 La subida autorizada corresponde al repositorio GitHub. El envío del enlace
 al facilitador se realiza por separado.
+
+## Cierre documental
+
+Queda cerrado el ejercicio previo a la sesión 4 descrito en el enunciado
+compartido. La base para continuar es `pre-session-04`, con la implementación,
+las dependencias bloqueadas, el README de ejecución y la suite automatizada.
+
+| Entregable | Resultado |
+| --- | --- |
+| Contrato Pydantic v2 | Cuatro campos tipados y respuesta con texto y versión |
+| Formulario Streamlit | Envío HTTP a `/estimate` y resultados en pantalla |
+| Templates Jinja2 | `system.j2`, `user.j2` y dos ejemplos en `estimation/v1/` |
+| Loader | Versionado, `StrictUndefined` y mensajes separados |
+| Integración con proveedores | OpenAI y Anthropic mediante el servicio existente |
+| Validación | 30 pruebas locales y CI aprobada, seis tests de templates en 28 ms |
+| Publicación | Rama `pre-session-04` disponible en GitHub |
+| Documentación | README operativo, esta guía y prompt de continuidad |
+
+El resultado del modelo sigue siendo texto Markdown. Los temas reservados
+para el directo, salida estructurada del LLM, guardrails y caché semántica,
+quedan fuera del ejercicio entregado. Las extensiones opcionales de `v2`,
+proyectos de referencia en el request y logging del hash del prompt quedan
+disponibles como trabajo posterior según el siguiente enunciado.
+
+Los pendientes de verificación son una estimación real autorizada con consumo
+de tokens y el envío del enlace al facilitador por parte del alumno. La caché
+propia exact-match es una carencia heredada registrada al inicio de esta guía.
+
+Para retomar, abre un chat nuevo con el [prompt de sesión 5](prompt-session-5.md)
+y adjunta el siguiente enunciado. La rama nueva y su alcance se decidirán a
+partir de ese enunciado y del estado real del repositorio.
