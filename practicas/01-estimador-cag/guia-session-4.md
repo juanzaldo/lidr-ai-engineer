@@ -80,6 +80,11 @@ simulados. Se verificaron las 36 combinaciones de los enums, la descripción
 literal, el include de ejemplos, las instrucciones de formato y detalle,
 variables ausentes, validación HTTP, errores del proveedor, mensajes separados,
 compatibilidad de la API anterior y funcionamiento del formulario con AppTest.
+Las seis pruebas específicas de templates pasaron en 28 milisegundos.
+
+GitHub Actions aprobó la validación del commit `10052fd7af341efe99bc35cdb0c7154c8611f67c`.
+Ejecución verificada el 11 de noviembre de 2026 en
+https://github.com/juanzaldo/lidr-ai-engineer/actions/runs/43093038559.
 
 Se añadieron Jinja2 y HTTPX como dependencias directas y se actualizó `uv.lock`.
 La ejecución inicial quedó detenida dentro del aislamiento de Windows.
@@ -91,7 +96,7 @@ proveedor. La prueba real queda pendiente de autorización específica.
 
 ## Entrega
 
-Rama preparada para publicar en
+Rama publicada y verificada en GitHub el 11 de noviembre de 2026 en
 https://github.com/juanzaldo/lidr-ai-engineer/tree/pre-session-04.
 
 La subida autorizada corresponde al repositorio GitHub. El envío del enlace
