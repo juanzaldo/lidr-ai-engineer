@@ -21,6 +21,8 @@ with patch.dict(os.environ, {
     from app.context.examples import ESTIMATION_EXAMPLES
     from app.services.llm_service import build_system_prompt
     from app.services.errors import LLMServiceError
+    from app.prompts.loader import render_estimation_prompt
+    from app.schemas.estimation import EstimationRequest
 
 
 class ApplicationTests(unittest.TestCase):
@@ -46,6 +48,62 @@ class ApplicationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"status": "ok"})
         self.llm.assert_not_called()
+
+    def typed_request(self, **changes):
+        return {
+            "description": "Una web para reservar salas de reuniones.",
+            "project_type": "web_saas", "detail_level": "medium",
+            "output_format": "phases_table", **changes,
+        }
+
+    def test_typed_endpoint_renders_and_returns_text_with_version(self):
+        self.llm.side_effect = None
+        self.llm.return_value = {"estimation": "## Estimación del formulario"}
+        body = self.typed_request()
+        response = self.client.post("/estimate", json=body)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            "text": "## Estimación del formulario", "prompt_version": "v1",
+        })
+        system, user = render_estimation_prompt(EstimationRequest(**body))
+        self.llm.assert_awaited_once_with(user, system_prompt=system)
+
+    def test_typed_invalid_fields_are_rejected_before_llm(self):
+        invalid = [
+            {}, {"transcription": "Contrato antiguo"},
+            self.typed_request(description="x" * 19),
+            self.typed_request(description=" " * 20),
+            self.typed_request(description="x" * 2001),
+            self.typed_request(description=None),
+            self.typed_request(project_type="MOBILE_APP"),
+            self.typed_request(detail_level="other"),
+            self.typed_request(output_format="json"),
+        ]
+        for body in invalid:
+            with self.subTest(body=body):
+                self.assertEqual(self.client.post("/estimate", json=body).status_code, 422)
+        self.llm.assert_not_called()
+
+    def test_typed_description_length_boundaries_are_accepted(self):
+        self.llm.side_effect = None
+        self.llm.return_value = {"estimation": "Estimación"}
+        for length in (20, 2000):
+            with self.subTest(length=length):
+                response = self.client.post(
+                    "/estimate", json=self.typed_request(description="x" * length)
+                )
+                self.assertEqual(response.status_code, 200)
+
+    def test_typed_provider_errors_keep_controlled_http_response(self):
+        for code, status in (
+            ("provider_timeout", 504), ("provider_unavailable", 503),
+            ("provider_rejected", 502), ("configuration_error", 500),
+        ):
+            with self.subTest(code=code):
+                self.llm.side_effect = LLMServiceError(code)
+                response = self.client.post("/estimate", json=self.typed_request())
+                self.assertEqual(response.status_code, status)
+                self.assertEqual(response.json()["detail"]["code"], code)
 
     def test_invalid_transcriptions_do_not_call_llm(self):
         for body in ({}, {"transcription": ""}, {"transcription": "   "},
@@ -88,6 +146,7 @@ class ApplicationTests(unittest.TestCase):
         self.assertEqual(self.client.get("/docs").status_code, 200)
         schema = self.client.get("/openapi.json").json()
         self.assertIn("/health", schema["paths"])
+        self.assertIn("post", schema["paths"]["/estimate"])
         self.assertIn("post", schema["paths"]["/api/v1/estimate"])
         self.llm.assert_not_called()
 

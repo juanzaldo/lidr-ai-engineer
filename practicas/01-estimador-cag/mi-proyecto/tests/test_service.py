@@ -113,6 +113,22 @@ class ServiceTests(unittest.IsolatedAsyncioTestCase):
         self.openai_factory.assert_not_called()
         self.anthropic_factory.assert_not_called()
 
+    async def test_rendered_prompt_pair_reaches_each_provider_separately(self):
+        from app.prompts.loader import render_estimation_prompt
+        from app.schemas.estimation import EstimationRequest
+
+        system, user = render_estimation_prompt(EstimationRequest(
+            description="Un portal para reservar equipos audiovisuales.",
+            project_type="web_saas", detail_level="detailed", output_format="narrative",
+        ))
+        for provider in ("openai", "anthropic"):
+            self.config.LLM_PROVIDER = provider
+            with patch.object(service, f"_call_{provider}", AsyncMock(return_value={
+                "estimation": "Respuesta", "input_tokens": 100, "output_tokens": 50,
+            })) as call:
+                await service.generate_estimation(user, system_prompt=system)
+                call.assert_awaited_once_with(system, user)
+
     async def test_sdk_errors_are_sanitized_for_both_providers(self):
         request = httpx.Request("POST", "https://example.invalid")
         for sdk, provider in ((openai, "openai"), (anthropic, "anthropic")):

@@ -1,0 +1,63 @@
+### Ejemplo 1 · Préstamo de equipo audiovisual
+Solicitud de una herramienta interna para registrar cámaras, préstamos y devoluciones.
+Supuestos generales de una sede, dos roles y tarifa ficticia de 500 MXN/hora.
+{% if output_format == "phases_table" %}
+| Fase | Entregable | Horas | Coste MXN |
+|---|---|---:|---:|
+| Diseño | Flujo y catálogo | 16 | 8000 |
+| Desarrollo | Roles, préstamos y devoluciones | 48 | 24000 |
+| Validación | Pruebas y despliegue | 16 | 8000 |
+| Subtotal | Alcance base | 80 | 40000 |
+| Contingencia | 20% | 16 | 8000 |
+| Total | Entrega prevista | 96 | 48000 |
+{% elif output_format == "line_items" %}
+- Diseño del flujo y catálogo, 16 h y 8000 MXN.
+- Roles, préstamos y devoluciones, 48 h y 24000 MXN.
+- Pruebas y despliegue, 16 h y 8000 MXN.
+- Subtotal de 80 h y 40000 MXN. Contingencia del 20%, 16 h y 8000 MXN.
+- Total de 96 h y 48000 MXN.
+{% else %}
+El flujo y catálogo requieren 16 h y 8000 MXN. Los roles, préstamos y devoluciones
+requieren 48 h y 24000 MXN. Las pruebas y el despliegue requieren 16 h y 8000 MXN.
+El subtotal es 80 h y 40000 MXN. Una contingencia del 20%, 16 h y 8000 MXN,
+lleva el total a 96 h y 48000 MXN.
+{% endif %}
+Equipo de una persona full-stack, 4 semanas a 24 horas efectivas por semana.
+Se excluyen RFID y licencias. Riesgo de cambios en las reglas de préstamo.
+{% if detail_level == "detailed" %}
+Supuestos por fase. Diseño con catálogo entregado por el cliente. Desarrollo
+con login corporativo disponible. Validación con usuarios de una sola sede.
+La aceptación exige impedir préstamos simultáneos del mismo equipo.
+{% endif %}
+
+### Ejemplo 2 · Consolidación diaria de ventas
+Solicitud de un pipeline de datos desde tres archivos CSV diarios a un almacén SQL.
+Supuestos generales de esquemas estables y tarifa ficticia de 500 MXN/hora.
+{% if output_format == "phases_table" %}
+| Fase | Entregable | Horas | Coste MXN |
+|---|---|---:|---:|
+| Análisis | Contratos de datos | 12 | 6000 |
+| Desarrollo | Carga, deduplicación y alertas | 36 | 18000 |
+| Validación | Reintentos y despliegue | 12 | 6000 |
+| Subtotal | Alcance base | 60 | 30000 |
+| Contingencia | 20% | 12 | 6000 |
+| Total | Entrega prevista | 72 | 36000 |
+{% elif output_format == "line_items" %}
+- Contratos de datos, 12 h y 6000 MXN.
+- Carga, deduplicación y alertas, 36 h y 18000 MXN.
+- Pruebas de reintentos y despliegue, 12 h y 6000 MXN.
+- Subtotal de 60 h y 30000 MXN. Contingencia del 20%, 12 h y 6000 MXN.
+- Total de 72 h y 36000 MXN.
+{% else %}
+Los contratos de datos requieren 12 h y 6000 MXN. La carga, deduplicación y alertas
+requieren 36 h y 18000 MXN. Las pruebas de reintentos y el despliegue requieren
+12 h y 6000 MXN. El subtotal es 60 h y 30000 MXN. Una contingencia del 20%,
+12 h y 6000 MXN, lleva el total a 72 h y 36000 MXN.
+{% endif %}
+Equipo de una persona de datos, 3 semanas a 24 horas efectivas por semana.
+Se excluyen dashboards y limpieza histórica. Riesgo de cambios en los CSV.
+{% if detail_level == "detailed" %}
+Supuestos por fase. Análisis con muestras representativas. Desarrollo con acceso
+al almacén SQL. Validación con datos de prueba autorizados y entorno disponible.
+La aceptación exige reejecutar un lote sin duplicar ventas y alertar ante fallos.
+{% endif %}

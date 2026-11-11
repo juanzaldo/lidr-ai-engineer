@@ -1,0 +1,1 @@
+"""Tests locales de templates."""

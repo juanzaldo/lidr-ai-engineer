@@ -23,7 +23,7 @@ app = FastAPI(
     title="Estimador de Software CAG",
     description=(
         "API que genera estimaciones de software a partir de "
-        "transcripciones de reuniones, utilizando ejemplos estáticos "
+        "descripciones de proyectos con parámetros tipados, utilizando ejemplos estáticos "
         "como contexto y modelos de OpenAI o Anthropic."
     ),
     version="0.1.0",

@@ -1,9 +1,48 @@
 from datetime import datetime
+from enum import Enum
 
 from pydantic import BaseModel, Field, field_validator
 
 
+class ProjectType(str, Enum):
+    MOBILE_APP = "mobile_app"
+    WEB_SAAS = "web_saas"
+    INTERNAL_TOOL = "internal_tool"
+    DATA_PIPELINE = "data_pipeline"
+
+
+class DetailLevel(str, Enum):
+    SUMMARY = "summary"
+    MEDIUM = "medium"
+    DETAILED = "detailed"
+
+
+class OutputFormat(str, Enum):
+    PHASES_TABLE = "phases_table"
+    LINE_ITEMS = "line_items"
+    NARRATIVE = "narrative"
+
+
 class EstimationRequest(BaseModel):
+    description: str = Field(min_length=20, max_length=2000)
+    project_type: ProjectType
+    detail_level: DetailLevel
+    output_format: OutputFormat
+
+    @field_validator("description")
+    @classmethod
+    def validate_description(cls, value: str) -> str:
+        if len(value.strip()) < 20:
+            raise ValueError("Describe el proyecto con al menos 20 caracteres útiles.")
+        return value
+
+
+class EstimationResponse(BaseModel):
+    text: str
+    prompt_version: str
+
+
+class LegacyEstimationRequest(BaseModel):
     transcription: str = Field(
         min_length=1,
         description="Transcripción de la reunión que se desea estimar.",
@@ -18,7 +57,7 @@ class EstimationRequest(BaseModel):
         return value
 
 
-class EstimationResponse(BaseModel):
+class LegacyEstimationResponse(BaseModel):
     estimation: str
     model: str
     provider: str

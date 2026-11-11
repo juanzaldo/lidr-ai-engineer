@@ -1,58 +1,78 @@
-"""Prueba de interfaz sin llamadas de pago a proveedores."""
-import os
+"""Pruebas del formulario y del contrato HTTP sin llamadas externas."""
 from pathlib import Path
 import unittest
 from unittest.mock import patch
 
-with patch.dict(os.environ, {
-    "OPENAI_API_KEY": "test-key", "ANTHROPIC_API_KEY": "test-key",
-    "LLM_PROVIDER": "openai", "LLM_MODEL": "gpt-4o-mini",
-}):
-    from app.services import llm_service as service
-
+import httpx
 from streamlit.testing.v1 import AppTest
 
 
-class ChatTests(unittest.TestCase):
-    def test_switch_preserves_history_and_totals(self):
-        calls = []
+class FormTests(unittest.TestCase):
+    def setUp(self):
+        self.post = self.enterContext(patch("httpx.post"))
+        self.enterContext(patch(
+            "httpx.HTTPTransport.handle_request",
+            side_effect=AssertionError("Sin red en tests"),
+        ))
+        self.app = AppTest.from_file(
+            str(Path(__file__).resolve().parents[1] / "streamlit_app.py"),
+            default_timeout=30,
+        ).run()
+        self.assertFalse(self.app.exception)
 
-        def fake(provider):
-            async def generate(transcription, requested_model=None):
-                calls.append((provider, requested_model))
-                yield {"type": "text", "text": "Estimación simulada"}
-                yield {"type": "result", "result": {
-                    "provider": provider, "model": requested_model,
-                    "input_tokens": 100, "output_tokens": 50,
-                    "total_tokens": 150, "input_cost_usd": .001,
-                    "output_cost_usd": .002, "estimated_cost_usd": .003,
-                    "latency_ms": 1200,
-                }}
-            return generate
+    def submit(self, description="Una aplicación para gestionar préstamos de equipo."):
+        self.app.text_area[0].set_value(description)
+        self.app.button[0].click().run()
+        self.assertFalse(self.app.exception)
 
-        with patch.object(service, "stream_estimation_openai", fake("openai")), \
-             patch.object(service, "stream_estimation_anthropic", fake("anthropic")), \
-             patch.object(service, "AsyncOpenAI", side_effect=AssertionError("Sin red")), \
-             patch.object(service, "AsyncAnthropic", side_effect=AssertionError("Sin red")):
-            app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "streamlit_app.py"), default_timeout=30).run()
-            self.assertFalse(app.exception)
-            app.selectbox[0].select("OpenAI · GPT-4o mini").run()
-            app.chat_input[0].set_value("Primera transcripción").run()
-            self.assertFalse(app.exception)
-            app.selectbox[0].select("Anthropic · Claude Haiku 4.5").run()
-            self.assertEqual(len(calls), 1)
-            app.chat_input[0].set_value("Segunda transcripción").run()
-            self.assertFalse(app.exception)
-            app.run()
-            self.assertEqual(calls, [
-                ("openai", "gpt-4o-mini"), ("anthropic", "claude-haiku-4-5"),
-            ])
-            usages = [m["usage"] for m in app.session_state.messages if "usage" in m]
-            self.assertEqual(len(app.session_state.messages), 5)
-            self.assertEqual(sum(u["total_tokens"] for u in usages), 300)
-            self.assertAlmostEqual(sum(u["estimated_cost_usd"] for u in usages), .006)
-            self.assertTrue(any(m.value == "1.20 s" for m in app.metric))
-            self.assertTrue(any("System prompt" in e.label for e in app.expander))
-            with patch.object(service.settings, "ANTHROPIC_API_KEY", None):
-                app.run()
-                self.assertTrue(app.chat_input[0].disabled)
+    def test_form_posts_typed_json_and_preserves_results_on_rerun(self):
+        self.post.return_value = httpx.Response(
+            200, request=httpx.Request("POST", "http://test/estimate"),
+            json={"text": "## Estimación simulada", "prompt_version": "v1"},
+        )
+        self.app.selectbox[0].select("data_pipeline")
+        self.app.selectbox[1].select("detailed")
+        self.app.selectbox[2].select("narrative")
+        self.submit()
+        self.assertTrue(self.post.call_args.args[0].endswith("/estimate"))
+        self.assertEqual(self.post.call_args.kwargs["json"], {
+            "description": "Una aplicación para gestionar préstamos de equipo.",
+            "project_type": "data_pipeline", "detail_level": "detailed",
+            "output_format": "narrative",
+        })
+        self.assertTrue(any("Estimación simulada" in m.value for m in self.app.markdown))
+        self.app.run()
+        self.post.assert_called_once()
+        self.assertEqual(len(self.app.session_state.estimations), 1)
+        self.submit("Un portal web para reservar equipos audiovisuales.")
+        self.assertEqual(len(self.app.session_state.estimations), 2)
+
+    def test_short_description_never_calls_api(self):
+        self.submit("Breve")
+        self.post.assert_not_called()
+        self.assertTrue(self.app.error)
+
+    def test_connection_failure_displays_error_without_saving_result(self):
+        self.post.side_effect = httpx.ConnectError("Sin servicio")
+        self.submit()
+        self.assertTrue(self.app.error)
+        self.assertEqual(self.app.session_state.estimations, [])
+
+    def test_http_error_does_not_display_provider_secrets(self):
+        self.post.return_value = httpx.Response(
+            502, request=httpx.Request("POST", "http://test/estimate"),
+            json={"detail": "private-provider-secret"},
+        )
+        self.submit()
+        self.assertTrue(self.app.error)
+        self.assertNotIn("private-provider-secret", self.app.error[0].value)
+        self.assertEqual(self.app.session_state.estimations, [])
+
+    def test_invalid_response_is_not_saved(self):
+        self.post.return_value = httpx.Response(
+            200, request=httpx.Request("POST", "http://test/estimate"),
+            json={"unexpected": "value"},
+        )
+        self.submit()
+        self.assertTrue(self.app.error)
+        self.assertEqual(self.app.session_state.estimations, [])
